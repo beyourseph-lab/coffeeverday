@@ -220,7 +220,7 @@
 
       function addPerson(name){
         name=(name||"").trim(); if(!name) return;
-        for (var i=0;i<state.people.length;i++){ if(state.people[i].name.toLowerCase()===name.toLowerCase()){ alert("Nama sudah ada."); return; } }
+        for (var i=0;i<state.people.length;i++){ if(state.people[i].name.toLowerCase()===name.toLowerCase()){ return; } }
         var p = { id: uid(), name: name }; state.people.push(p);
         if(!state.payer) state.payer = p.id;
         refreshPeople(); refreshPayerSelect(); renderItemConsumers(); refreshItems(); refresh();
@@ -241,8 +241,8 @@
       }
       function addItem(name, price, qty, consumers){
         name=(name||"").trim(); price=+price||0; qty=Math.max(1, +qty||1);
-        if(!name || price<=0){ alert("Nama & harga wajib diisi."); return; }
-        if(!consumers.length){ alert("Pilih minimal satu orang."); return; }
+        if(!name || price<=0) return; // no alerts
+        if(!consumers.length) return; // no alerts
         state.items.push({ id: uid(), name:name, price:price, qty:qty, consumers: consumers.slice(0) });
         $('itemName').value=''; $('itemPrice').value=''; $('itemQty').value=1; renderItemConsumers(); refreshItems(); refresh();
       }
@@ -382,7 +382,6 @@
       bindTap($('btnNew'), function(){ if(confirm('Buat ulang dokumen ini? Semua data saat ini akan dihapus.')){ state = { people: [], items: [], payer: '', paidTotal: 0, payerBank: '', payerAccount: '', place: '', date: '', note: '', svcPct: 5, taxPct: 10, discount: 0 }; refreshAll(); } });
       bindTap($('btnShareWA'), shareWA); bindTap($('btnShareWA2'), shareWA);
 
-      // In-app viewer hint (WhatsApp/FB/Files preview)
       var isInApp = /(WhatsApp|FBAN|FBIOS|Line|Instagram|Telegram)/i.test(navigator.userAgent);
       var isFile = location.protocol === 'file:';
       if ((isInApp && isFile)){

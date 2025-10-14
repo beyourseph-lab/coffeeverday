@@ -1,3 +1,4 @@
+
 <html lang="id">
 <head>
   <meta charset="utf-8" />
@@ -57,7 +58,8 @@
       <h1>Split the Bill! v5.33</h1>
       <div class="controls">
         <button class="btn ghost" id="btnNew" type="button">Buat Ulang</button>
-        <button class="btn" id="btnShareWA" type="button">Share WhatsApp</button>
+        <!-- ⬇️ teks diperbarui -->
+        <button class="btn" id="btnShareWA" type="button">Share to Whatsapp</button>
         <a class="btn primary" id="btnCoffee" href="https://sociabuzz.com/orangpintarminumkopi/tribe" target="_blank" rel="noopener noreferrer">☕ Traktir Kopi</a>
       </div>
     </div>
@@ -187,7 +189,8 @@
           <h3>Siapa Bayar Siapa</h3>
           <div id="settlements"></div>
           <div style="display:flex; gap:8px; justify-content:flex-end; margin-top:8px;">
-            <button class="btn" id="btnShareWA2" type="button">Share WhatsApp</button>
+            <!-- ⬇️ teks diperbarui -->
+            <button class="btn" id="btnShareWA2" type="button">Share to Whatsapp</button>
           </div>
         </div>
       </section>
@@ -373,13 +376,24 @@
         var text = encodeURIComponent(lines.join("\n")); var isMobile = /Android|iPhone|iPad|iPod/i.test(navigator.userAgent); var href = isMobile ? "whatsapp://send?text="+text : "https://wa.me/?text="+text; var win = window.open(href, "_blank", "noopener,noreferrer"); if (win) { win.opener=null; }
       }
 
-      // Bind taps
+      // Bind taps (umum)
       bindTap($('btnAddPerson'), function(){ addPerson($('personName').value); $('personName').value=''; $('personName').focus(); });
       bindTap($('btnAddItem'), function(){ var consumers = getConsumersFromForm(); addItem($('itemName').value, $('itemPrice').value, $('itemQty').value, consumers); });
       ['svcPctInput','taxPctInput','discount','paidTotal','payerBank','payerAccount','place','dateField','note'].forEach(function(id){ var el=$(id); el && el.addEventListener('input', refresh); });
       $('payer').addEventListener('change', function(e){ state.payer = e.target.value; refresh(); });
-      bindTap($('btnNew'), function(){ if(confirm('Buat ulang dokumen ini? Semua data saat ini akan dihapus.')){ state = { people: [], items: [], payer: '', paidTotal: 0, payerBank: '', payerAccount: '', place: '', date: '', note: '', svcPct: 5, taxPct: 10, discount: 0 }; refreshAll(); } });
-      bindTap($('btnShareWA'), shareWA); bindTap($('btnShareWA2'), shareWA);
+
+      // ⬇️ Perbaikan: konfirmasi "Buat Ulang" hanya 1x (pakai single click, bukan bindTap)
+      $('btnNew').addEventListener('click', function(e){
+        e.preventDefault(); e.stopPropagation();
+        if(confirm('Buat ulang dokumen ini? Semua data saat ini akan dihapus.')){
+          state = { people: [], items: [], payer: '', paidTotal: 0, payerBank: '', payerAccount: '', place: '', date: '', note: '', svcPct: 5, taxPct: 10, discount: 0 };
+          refreshAll();
+        }
+      }, {passive:false});
+
+      // Share WA (atas & bawah)
+      bindTap($('btnShareWA'), shareWA);
+      bindTap($('btnShareWA2'), shareWA);
 
       var isInApp = /(WhatsApp|FBAN|FBIOS|Line|Instagram|Telegram)/i.test(navigator.userAgent);
       var isFile = location.protocol === 'file:';

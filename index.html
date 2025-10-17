@@ -1,4 +1,3 @@
-<!DOCTYPE html>
 <html lang="id">
 <head>
   <meta charset="utf-8" />
@@ -412,7 +411,12 @@
       bindTap($('btnAddItem'), function(){ var consumers = getConsumersFromForm(); addItem($('itemName').value, $('itemPrice').value, $('itemQty').value, consumers); });
       ['svcPctInput','taxPctInput','discount','paidTotal','payerBank','payerAccount','place','dateField','note'].forEach(function(id){ var el=$(id); el && el.addEventListener('input', refresh); });
       $('payer').addEventListener('change', function(e){ state.payer = e.target.value; refresh(); });
-      bindTap($('btnNew'), function(){ if(confirm('Buat ulang dokumen ini? Semua data saat ini akan dihapus.')){ state = { people: [], items: [], payer: '', paidTotal: 0, payerBank: '', payerAccount: '', place: '', date: '', note: '', svcPct: 5, taxPct: 10, discount: 0 }; refreshAll(); } });
+     $('btnNew').addEventListener('click', function() {
+  if(confirm('Buat ulang dokumen ini? Semua data saat ini akan dihapus.')) {
+    state = { people: [], items: [], payer: '', paidTotal: 0, payerBank: '', payerAccount: '', place: '', date: '', note: '', svcPct: 5, taxPct: 10, discount: 0 };
+    refreshAll();
+  }
+});
       bindTap($('btnShareWA'), shareWA); bindTap($('btnShareWA2'), shareWA);
 
       var isInApp = /(WhatsApp|FBAN|FBIOS|Line|Instagram|Telegram)/i.test(navigator.userAgent);
